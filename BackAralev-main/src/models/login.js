@@ -1,25 +1,34 @@
 require('dotenv').config({ path: require('path').resolve(__dirname, '../../.env') });
 const crypto = require('crypto');
-const { connection, fecharConexao } = require('../../database');
+const { connection } = require('../../database'); // Certifique-se de que fecharConexao esteja implementado corretamente.
 
 function loginUser(login, senha, callback) {
+    if (!connection) {
+        return callback(new Error('Erro de conexão com o banco de dados'), null);
+    }
+
+    // Executa a consulta para buscar o usuário e a senha
     connection.query(
         'SELECT SENHA, SALT FROM tb_usuario WHERE LOGIN = ?',
         [login],
         (err, results) => {
             if (err || results.length === 0) {
                 console.error('Usuário não encontrado!');
-                return callback(null, false);
+                connection.end(); // Fecha a conexão após a consulta
+                return callback(null, false); // Retorna false se não encontrar o usuário
             }
 
             const { SENHA: storedHash, SALT: salt } = results[0];
 
+            // Verifica a senha
             if (verifyPassword(senha, storedHash, salt)) {
                 console.log('Login bem-sucedido!');
-                return callback(null, true);
+                connection.end(); // Fecha a conexão após a consulta
+                return callback(null, true); // Login bem-sucedido
             } else {
                 console.log('Senha incorreta!');
-                return callback(null, false);
+                connection.end(); // Fecha a conexão após a consulta
+                return callback(null, false); // Senha incorreta
             }
         }
     );

@@ -13,6 +13,18 @@ app.get('/', (req, res) => {
   res.send('Backend rodando!');
 });
 
+// Transformando loginUser em uma Promise
+const loginUserPromise = (LOGIN, SENHA) => {
+  return new Promise((resolve, reject) => {
+    loginUser(LOGIN, SENHA, (err, sucesso) => {
+      if (err) {
+        reject('Erro no servidor');
+      }
+      resolve(sucesso);
+    });
+  });
+};
+
 app.post('/login', async (req, res) => {
   const { LOGIN, SENHA } = req.body;
   
@@ -21,19 +33,15 @@ app.post('/login', async (req, res) => {
   }
 
   try {
-    loginUser(LOGIN, SENHA, (err, sucesso) => {
-      if (err) {
-        return res.status(500).json({ sucesso: false, mensagem: 'Erro no servidor' });
-      }
-      if (sucesso) {
-        return res.status(200).json({ sucesso: true, mensagem: 'A Login efetuado com sucesso!' });
-      } else {
-        return res.status(401).json({ sucesso: false, mensagem: 'Usuário ou senha inválidos' });
-      }
-    });
+    const sucesso = await loginUserPromise(LOGIN, SENHA);
+    if (sucesso) {
+      return res.status(200).json({ sucesso: true, mensagem: 'Login efetuado com sucesso!' });
+    } else {
+      return res.status(401).json({ sucesso: false, mensagem: 'Usuário ou senha inválidos' });
+    }
   } catch (error) {
     console.error('Erro no login:', error);
-    res.status(500).json({ sucesso: false, mensagem: 'Erro no servidor' });
+    return res.status(500).json({ sucesso: false, mensagem: error });
   }
 });
 
