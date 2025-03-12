@@ -17,4 +17,12 @@ connection.connect((err) => {
     }
 });
 
-module.exports = connection;
+function fecharConexao() {
+    connection.end((err) => {
+        if (err) console.error('Erro ao fechar conexão:', err);
+        else console.log('Conexão encerrada.');
+    });
+}
+
+//module.exports = connection;
+module.exports = { connection, fecharConexao };
