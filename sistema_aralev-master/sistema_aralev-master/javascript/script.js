@@ -291,3 +291,21 @@ document.addEventListener("DOMContentLoaded", function () {
         tabelaPedidos.appendChild(newRow);
     });
 })
+
+document.addEventListener("DOMContentLoaded", function() {
+    const linkRecuperacao = document.querySelector(".esqueceu-senha a");
+    const formRecuperacao = document.getElementById("form-recuperacao");
+    const formLogin = document.getElementById("loginForm");
+    const btnCancelar = document.querySelector("#form-recuperacao button[type='button']");
+    
+    linkRecuperacao.addEventListener("click", function(event) {
+        event.preventDefault();
+        formLogin.style.display = "none";
+        formRecuperacao.style.display = "block";
+    });
+    
+    btnCancelar.addEventListener("click", function() {
+        formRecuperacao.style.display = "none";
+        formLogin.style.display = "block";
+    });
+});

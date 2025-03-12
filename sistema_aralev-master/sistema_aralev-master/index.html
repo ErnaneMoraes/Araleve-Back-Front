@@ -11,23 +11,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Montserrat&display=swap" rel="stylesheet">
     <title>Login - Araleve</title>
     <script>
-        document.addEventListener("DOMContentLoaded", function() {
-            const linkRecuperacao = document.querySelector(".esqueceu-senha a");
-            const formRecuperacao = document.getElementById("form-recuperacao");
-            const formLogin = document.getElementById("form-login");
-            const btnCancelar = document.querySelector("#form-recuperacao button[type='button']");
-            
-            linkRecuperacao.addEventListener("click", function(event) {
-                event.preventDefault();
-                formLogin.style.display = "none";
-                formRecuperacao.style.display = "block";
-            });
-            
-            btnCancelar.addEventListener("click", function() {
-                formRecuperacao.style.display = "none";
-                formLogin.style.display = "block";
-            });
-        });
+        
     </script>
 </head>
 <body>
@@ -38,7 +22,7 @@
             </div>
             <div class="container-login">
                 <img src="assets/Logo.png" alt="Logo Araleve">
-                <form method="post" action="#" id="form-login">
+                <form method="post" action="#" id="loginForm">
                     <div class="campo">
                         <label>Usuário</label>
                         <input type="text" name="usuario" placeholder="Usuário" required>
@@ -75,7 +59,8 @@
             
         </div>
     </section>
-
+    <script src="javascript/login.js"></script> 
+    <script src="javascript/script.js"></script> 
 </body>
 </html>
     
