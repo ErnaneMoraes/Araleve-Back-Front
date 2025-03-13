@@ -12,14 +12,14 @@ async function testarUsuario() {
     //console.log('Login já existe?', loginExistente ? 'Sim' : 'Não');
 
     // Criar um novo usuário no banco de dados
-    const novoUsuario = new Usuario(null, 'Carlos Oliveira', 'carlos.oliveira', 'senha789', 'visitante');
+    const novoUsuario = new Usuario(null, 'Ernane', 'arroba', 'Unileste', '1');
 
     // Testar o método criarUsuario
     novoUsuario.criarUsuario(novoUsuario.nome, novoUsuario.login, novoUsuario.senha, novoUsuario.nivelAcesso);
 
     // Testar autenticação de usuário
-    const autenticado = novoUsuario.autenticarUsuario('carlos.oliveira', 'senha789');
-    console.log('Usuário autenticado?', autenticado ? 'Sim' : 'Não');
+    //const autenticado = novoUsuario.autenticarUsuario('carlos.oliveira', 'senha789');
+    //console.log('Usuário autenticado?', autenticado ? 'Sim' : 'Não');
 
     // Testar definição de permissões
     novoUsuario.definirPermissoes();
