@@ -26,7 +26,7 @@
                     console.log("Resposta da API:", data);
 
                     // Verifica se a resposta da API contém a chave 'message'
-                    if (response.ok && data.message) {
+                    if (response.ok && data.message) {  
                         window.location.href = "inicio.html";
                     } else {
                         alert("Erro: " + (data.message || "Erro desconhecido"));  // Exibe erro se não houver mensagem
