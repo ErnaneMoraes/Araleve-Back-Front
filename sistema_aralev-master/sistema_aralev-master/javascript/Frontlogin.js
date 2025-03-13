@@ -16,7 +16,7 @@
                     }
 
                     try {
-                        const response = await fetch("http://localhost:8080/login", {
+                        const response = await fetch("https://backendaraleve01-486376460769.southamerica-east1.run.app/login", {
                             method: "POST",
                             headers: { "Content-Type": "application/json" },
                             body: JSON.stringify({ login: login, senha: senha })
@@ -44,7 +44,7 @@
 
         async function checkServerStatus() {
             try {
-                const response = await fetch("http://localhost:8080/status");
+                const response = await fetch("https://backendaraleve01-486376460769.southamerica-east1.run.app/status");
                 const data = await response.json();
         
                 document.getElementById("api-status").style.backgroundColor = data.api ? "green" : "red";
