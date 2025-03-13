@@ -1,50 +1,65 @@
 const express = require('express');
-const bodyParser = require('body-parser');
 const cors = require('cors');
-const { loginUser } = require('./src/models/Login'); // Certifique-se do caminho correto
+const meuAPP = express();
+const { connectDB, pool } = require('./database');
+require('dotenv').config();
 
-const app = express();
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 8080;
 
-app.use(cors());
-app.use(bodyParser.json());
+meuAPP.use(cors()); // Adicionado para permitir requisições do frontend
+meuAPP.use(express.json());
+meuAPP.use(express.urlencoded({ extended: true }));
 
-app.get('/', (req, res) => {
-  res.send('Backend rodando!');
+connectDB();
+
+meuAPP.get("/", (req, res) => {
+  res.send("Olá mundo");
 });
 
-// Transformando loginUser em uma Promise
-const loginUserPromise = (LOGIN, SENHA) => {
-  return new Promise((resolve, reject) => {
-    loginUser(LOGIN, SENHA, (err, sucesso) => {
-      if (err) {
-        reject('Erro no servidor');
-      }
-      resolve(sucesso);
-    });
-  });
-};
-
-app.post('/login', async (req, res) => {
-  const { LOGIN, SENHA } = req.body;
-  
-  if (!LOGIN || !SENHA) {
-    return res.status(400).json({ sucesso: false, mensagem: 'Usuário e senha são obrigatórios!' });
+meuAPP.get("/usuarios", async (req, res) => {
+  try {
+    const [rows] = await pool.query("SELECT * FROM tb_usuario");
+    res.json(rows);
+  } catch (err) {
+    console.error("Erro ao buscar usuário:", err);
+    res.status(500).send("Erro ao buscar usuário");
   }
+});
+
+meuAPP.get("/desc", async (req, res) => {
+  try {
+    const [rows] = await pool.query("DESCRIBE tb_usuario;");
+    res.json(rows);
+  } catch (err) {
+    console.error("Erro ao buscar usuário:", err);
+    res.status(500).send("Erro ao buscar usuário");
+  }
+});
+
+meuAPP.post("/login", async (req, res) => {
+  // Verificando se os dados estão no corpo da requisição
+  const { LOGIN, SENHA } = req.body;
+  console.log(req.body);  // Verifique o conteúdo da requisição
 
   try {
-    const sucesso = await loginUserPromise(LOGIN, SENHA);
-    if (sucesso) {
-      return res.status(200).json({ sucesso: true, mensagem: 'Login efetuado com sucesso!' });
+    const [rows] = await pool.query(
+      "SELECT * FROM tb_usuario WHERE LOGIN = ? AND SENHA = ?",
+      [LOGIN, SENHA]  // Certifique-se de que 'LOGIN' e 'SENHA' estão sendo passados corretamente
+    );
+
+    if (rows.length > 0) {
+      res.status(200).json({ sucesso: true, mensagem: "Login efetuado com sucesso!" });
     } else {
-      return res.status(401).json({ sucesso: false, mensagem: 'Usuário ou senha inválidos' });
+      res.status(401).json({ sucesso: false, mensagem: "Usuário ou senha inválidos" });
     }
-  } catch (error) {
-    console.error('Erro no login:', error);
-    return res.status(500).json({ sucesso: false, mensagem: error });
+  } catch (err) {
+    console.error("Erro na autenticação:", err);
+    res.status(500).json({ sucesso: false, mensagem: "Erro no servidor" });
   }
 });
 
-app.listen(PORT, () => {
-  console.log(`Servidor rodando na porta 127.0.0.1:${PORT}`);
+
+
+meuAPP.listen(PORT, () => {
+  console.log(`Servidor rodando na porta ${PORT} http://localhost:8080/`);
 });

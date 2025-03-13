@@ -1,29 +1,34 @@
+const mysql = require('mysql2/promise');
 require('dotenv').config();
 
-const mysql = require('mysql');
-
-const connection = mysql.createConnection({
-    host: process.env.DB_HOST,
-    user: process.env.DB_USER,
-    password: process.env.DB_PASSWORD,
-    database: process.env.DB_NAME
+const pool = mysql.createPool({
+  host: process.env.DB_SERVER,
+  user: process.env.DB_USER,
+  password: process.env.DB_PASSWORD,
+  database: process.env.DB_DATABASE,
+  waitForConnections: true,
+  connectionLimit: 10,
+  queueLimit: 0
 });
 
-connection.connect((err) => {
-    if (err) {
-        console.error('Erro ao conectar ao banco de dados:', err);
-    } else {
-        console.log('Conexão com o banco de dados estabelecida com sucesso!');
-    }
-});
+/*const pool = mysql.createPool({
+    host: 'srv722.hstgr.io',
+    user: 'u462976471_AdminAraleve',
+    password: 'AraleveAdmin?01',
+    database: 'u462976471_db_araleve',
+    waitForConnections: true,
+    connectionLimit: 10,
+    queueLimit: 0
+  });*/
 
-connection.end((err) => {
-    if (err) {
-        console.error('Erro ao fechar a conexão:', err);
-    } else {
-        console.log('Conexão com o banco de dados fechada com sucesso!');
-    }
-});
+async function connectDB() {
+  try {
+    const connection = await pool.getConnection();
+    console.log("Conectado ao MySQL com sucesso!");
+    connection.release();
+  } catch (err) {
+    console.error("Erro ao conectar ao MySQL:", err);
+  }
+}
 
-//module.exports = connection;
-module.exports = { connection };
+module.exports = { connectDB, pool };
