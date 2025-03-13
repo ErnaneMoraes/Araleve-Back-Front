@@ -1,4 +1,4 @@
-const connection = require('../../database');
+const { pool } = require('../../database'); // certifique-se de importar o pool
 
 class Usuario {
     constructor(idUsuario, nome, login, senha, nivelAcesso) {
@@ -21,14 +21,14 @@ class Usuario {
         console.warn('ALERTA:', mensagem);
     }
 
-    criarUsuario(nome, login, senha, nivelAcesso) {
+    async criarUsuario(nome, login, senha, nivelAcesso) {
         const query = 'INSERT INTO tb_usuario (nome, login, senha, nivel_acesso) VALUES (?, ?, ?, ?)';
-        connection.query(query, [nome, login, senha, nivelAcesso], (err, results) => {
-            if (err) {
-                console.error('Erro ao criar usuário:', err);
-            }
+        try {
+            const [results] = await pool.execute(query, [nome, login, senha, nivelAcesso]);
             console.log('Id do usuário criado:', results.insertId);
-        });
+        } catch (err) {
+            console.error('Erro ao criar usuário:', err);
+        }
     }
 
     autenticarUsuario(login, senha) {
