@@ -32,7 +32,7 @@ async function loginUser(login, senha) {
     }
 }
 
-// Rota POST para login
+//Rota POST para login
 router.post('/', async (req, res) => {
     const { login, senha } = req.body;
     console.log(`Recebido login: ${login}, senha: ${senha}`);
