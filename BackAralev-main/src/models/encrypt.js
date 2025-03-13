@@ -37,6 +37,10 @@ module.exports = {
 };
 
 
-// Exemplo de uso:
-//registerUser('Ernane Moraes', 'ernane.moraes', 'Unileste', 1);
-//registerUser('Lucas', 'lucas', '123456', 2);
+/* Exemplo de uso:
+registerUser('Ernane Moraes', 'ernane.moraes', 'Unileste', 1);
+registerUser('Cauã Matteus', 'caua.matteus', 'Unileste', 1);
+registerUser('Lucimar Ferreira', 'lucimar.ferreira', 'Unileste', 1);
+registerUser('Matheus Fernando', 'matheus.fernando', 'Unileste', 1);
+registerUser('Luan Venancio', 'luan.venancio', 'Unileste', 1);
+*/

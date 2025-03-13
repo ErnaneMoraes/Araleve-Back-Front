@@ -214,3 +214,20 @@ button:hover {
         padding: 20px;
     }
 }
+
+#status-indicators {
+    position: fixed;
+    bottom: 10px;
+    right: 10px;
+    display: flex;
+    gap: 10px;
+    z-index: 1000; /* Garante que fique acima de outros elementos */
+}
+
+.indicator {
+    width: 15px;
+    height: 15px;
+    border-radius: 50%;
+    background-color: red; /* Padrão: desconectado */
+    border: 1px solid black;
+}

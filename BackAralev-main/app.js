@@ -3,6 +3,7 @@ const cors = require('cors');
 const meuAPP = express();
 const { connectDB, pool } = require('./database');
 const loginRouter = require('./src/models/login');  // Importa o router de login
+const statusRouter = require('./src/models/status');  // Importa o router de status
 
 require('dotenv').config();
 
@@ -43,6 +44,9 @@ meuAPP.get("/desc", async (req, res) => {
 
 // Usando o router de login para a rota /login
 meuAPP.use('/login', loginRouter); // Agora usa o router para a autenticação
+
+// Usando o router de status para a rota /status
+meuAPP.use(statusRouter); // Agora usa o router de status
 
 meuAPP.listen(PORT, () => {
   console.log(`Servidor rodando na porta ${PORT} http://localhost:8080/`);
