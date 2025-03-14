@@ -5,6 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="css/login.css">
+    <link rel="stylesheet" href="css/style.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Ysabeau+Infant&display=swap" rel="stylesheet">
@@ -25,7 +26,7 @@
                 <form method="post" action="#" id="loginForm">
                     <div class="campo">
                         <label>Usuário</label>
-                        <input type="text" name="usuario" placeholder="Usuário" required>
+                        <input type="text" name="login" placeholder="Usuário" required>
                     </div>
                     <div class="campo">
                         <label>Senha</label>
@@ -59,8 +60,15 @@
             
         </div>
     </section>
-    <script src="javascript/login.js"></script> 
+
+    <div id="status-indicators">
+        <div class="indicator" id="api-status" title="API"></div>
+        <div class="indicator" id="db-status" title="Banco de Dados"></div>
+    </div>
+    
+    <script src="javascript/Frontlogin.js"></script> 
     <script src="javascript/script.js"></script> 
+
 </body>
 </html>
     

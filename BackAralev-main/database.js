@@ -11,16 +11,6 @@ const pool = mysql.createPool({
   queueLimit: 0
 });
 
-/*const pool = mysql.createPool({
-    host: 'srv722.hstgr.io',
-    user: 'u462976471_AdminAraleve',
-    password: 'AraleveAdmin?01',
-    database: 'u462976471_db_araleve',
-    waitForConnections: true,
-    connectionLimit: 10,
-    queueLimit: 0
-  });*/
-
 async function connectDB() {
   try {
     const connection = await pool.getConnection();

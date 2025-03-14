@@ -1,4 +1,5 @@
-const connection = require('../../database');
+const { pool } = require('../../database');
+const { hashPassword } = require('./encrypt'); // Corrigido aqui
 
 class Usuario {
     constructor(idUsuario, nome, login, senha, nivelAcesso) {
@@ -21,14 +22,25 @@ class Usuario {
         console.warn('ALERTA:', mensagem);
     }
 
-    criarUsuario(nome, login, senha, nivelAcesso) {
-        const query = 'INSERT INTO tb_usuario (nome, login, senha, nivel_acesso) VALUES (?, ?, ?, ?)';
-        connection.query(query, [nome, login, senha, nivelAcesso], (err, results) => {
-            if (err) {
-                console.error('Erro ao criar usuário:', err);
+    async criarUsuario(nome, login, senha, nivelAcesso) {
+        try {
+            // Verifica se o login já existe no banco de dados
+            const [rows] = await pool.execute('SELECT * FROM tb_usuario WHERE LOGIN = ?', [login]);
+            if (rows.length > 0) {
+                console.log('ALERTA: O login já está em uso.');
+                return;
             }
-            console.log('Id do usuário criado:', results.insertId);
-        });
+
+            // Gera o hash da senha usando a função hashPassword do encrypt.js
+            const { salt, hash } = hashPassword(senha);
+
+            // Insere o novo usuário no banco de dados com a senha criptografada
+            const query = 'INSERT INTO tb_usuario (NOME, LOGIN, SENHA, SALT, NIVEL_ACESSO) VALUES (?, ?, ?, ?, ?)';
+            const [results] = await pool.execute(query, [nome, login, hash, salt, nivelAcesso]);
+            console.log('Usuário registrado com sucesso! ID:', results.insertId);
+        } catch (err) {
+            console.error('Erro ao criar usuário:', err);
+        }
     }
 
     autenticarUsuario(login, senha) {
@@ -43,13 +55,13 @@ class Usuario {
 
     definirPermissoes() {
         switch (this.nivelAcesso) {
-            case 'admin':
+            case '1':
                 console.log('Permissões de administrador: Acesso total ao sistema.');
                 break;
-            case 'editor':
+            case '2':
                 console.log('Permissões de editor: Pode editar conteúdo, mas não pode administrar usuários.');
                 break;
-            case 'visitante':
+            case '3':
                 console.log('Permissões de visitante: Apenas leitura.');
                 break;
             default:
